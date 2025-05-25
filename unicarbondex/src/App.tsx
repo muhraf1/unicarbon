@@ -10,10 +10,8 @@ function App() {
   return (
     <>
       <NavigationMenuDemo />
-      <div>
-        <h1>Unicarbon</h1>
-        <img src="../src/assets/logo_unicarbon.png" alt="" width={200} height={200} />
-      </div>
+    
+     
     </>
   )
 }
