@@ -21,9 +21,18 @@ const Limit = () => {
   return (
     
     <div className="flex flex-row max-h-full justify-center items-center gap-2">
-{/* <div className='w-1/2 h-[400px]'>
-<iframe height="100%" width="100%" id="geckoterminal-embed" title="GeckoTerminal Embed" src="https://www.geckoterminal.com/celo/pools/0x7f7c4335ccac291ddedcef4429a626c442b627ed?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=1h" frameborder="2" allow="clipboard-write" allowfullscreen></iframe>
-</div> */}
+<div className='w-1/2 h-[500px]'>
+<iframe 
+  height="100%" 
+  width="100%" 
+  id="geckoterminal-embed" 
+  title="GeckoTerminal Embed" 
+  src="https://www.geckoterminal.com/celo/pools/0x7f7c4335ccac291ddedcef4429a626c442b627ed?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=1h" 
+  frameBorder="2" 
+  allow="clipboard-write" 
+  allowFullScreen
+/>
+</div>
 
       {/* main cards */}
       <Card className=" w-[450px] p-3  bg-[#A4D696] border-0 mt-5 gap-1">
