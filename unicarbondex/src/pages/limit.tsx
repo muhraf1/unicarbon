@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowDownUp } from 'lucide-react';
 import { Slider } from "@/components/ui/slider"
 import { useState } from 'react';
+import { ChartDemo } from '@/components/chart_demo';
 
 
 
@@ -22,7 +23,7 @@ const Limit = () => {
     
     <div className="flex flex-row max-h-full justify-center items-center gap-2">
 <div className='w-1/2 h-[500px]'>
-<iframe 
+{/* <iframe 
   height="100%" 
   width="100%" 
   id="geckoterminal-embed" 
@@ -31,7 +32,8 @@ const Limit = () => {
   frameBorder="2" 
   allow="clipboard-write" 
   allowFullScreen
-/>
+/> */}
+<ChartDemo></ChartDemo>
 </div>
 
       {/* main cards */}
