@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { ChartDemo } from '@/components/chart_demo';
 
 import TradeFeature from "@/components/trade_feature";
 import { ChevronUp, ChevronDown } from 'lucide-react';
@@ -45,22 +46,13 @@ const Twap = () => {
   return (
     <div className="flex flex-row max-h-full justify-center items-center gap-2">
        <div className='w-1/2 h-[500px]'>
-<iframe 
-  height="100%" 
-  width="100%" 
-  id="geckoterminal-embed" 
-  title="GeckoTerminal Embed" 
-  src="https://www.geckoterminal.com/celo/pools/0x7f7c4335ccac291ddedcef4429a626c442b627ed?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=1h" 
-
-  allow="clipboard-write" 
-  allowFullScreen
-/>
+       <ChartDemo></ChartDemo>
 </div>
       {/* main cards */}
       <Card className=" w-[450px] p-3  bg-[#A4D696] border-0 mt-5 gap-2">
         <TradeFeature></TradeFeature>
         {/* upper cards pair  */}
-        <Card className="gap-0 py-3">
+        <Card className="gap-0 py-3 bg-[#D6EBD0]">
           <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Sell</h4></div>
@@ -87,7 +79,7 @@ const Twap = () => {
           </div>
         </Card>
         {/* lower cards pair  */}
-        <Card className='py-3'>
+        <Card className='py-3 bg-[#D6EBD0]'>
           <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Buy</h4></div>
@@ -211,7 +203,7 @@ const Twap = () => {
         </Card>
         {/* total duration (left) & Interval (Right)*/}
         <div className='flex flex-row w-full justify-between gap-2'>
-          <Card className='py-2 px-2 w-1/2 gap-2'>
+          <Card className='py-2 px-2 w-1/2 gap-2 bg-[#D6EBD0]'>
 
             <div className='flex flex-row w-full items-center justify-between px-1 '>
               <div className=' flex flex-row  text-xs font-semibold text-gray-800'>
@@ -274,7 +266,7 @@ const Twap = () => {
             </div>        
                 <div className="flex  items-center gap-2 px-4   rounded-tr-xl rounded-br-xl">
               <div className="min-w-[2rem]">
-              hihih
+              1234
               </div>
             </div>
 
@@ -293,7 +285,7 @@ const Twap = () => {
             </div>        
                 <div className="flex  items-center gap-2 px-4   rounded-tr-xl rounded-br-xl">
               <div className="min-w-[2rem]">
-hihih
+124
               </div>
             </div>
 

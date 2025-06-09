@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { usePrivy } from '@privy-io/react-auth'
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -39,6 +40,8 @@ const menuItems = [
 ]
 
 export function NavigationMenuDemo() {
+    const { login, logout, authenticated, user } = usePrivy();
+    
     return (
         <NavigationMenu className="max-w-8xl  justify-baseline pb-4 px-4">
             <NavigationMenuList className="flex max-w-full   px-4 gap-1 ">
@@ -69,11 +72,23 @@ export function NavigationMenuDemo() {
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
+                {/* Explore  */}
+                <NavigationMenuItem className="mx-1 justify-center  ">
+                    <NavigationMenuLink asChild>
+                        <Link 
+                            to="/explore" 
+                            className=" flex items-center   text-xl hover:text-gray-600 transition-colors"
+                        >
+                            Explore
+                        </Link>
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
+
                 {/* Pool - Could be a dropdown or simple link */}
                 <NavigationMenuItem className="mx-1">
                     <NavigationMenuLink asChild>
                         <Link 
-                            to="/pool" 
+                            to="/positions" 
                             className=" flex items-center p-0 text-xl hover:text-gray-600 transition-colors"
                         >
                             Pool
@@ -97,14 +112,35 @@ export function NavigationMenuDemo() {
                     </div>
                 </div>
   {/* Connect Wallet button */}
-            <div className="flex flex-grow justify-end-safe ">
+            
+            {/* Wallet Connection Section */}
+            <div className="flex flex-grow justify-end-safe gap-2">
+                {authenticated ? (
+                    <>
+                        <Button 
+                            variant="default"
+                            className="rounded-lg bg-[#097833] text-white hover:bg-[#097833]/90 px-6"
+                        >
+                            {user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}
+                        </Button>
+                        <Button 
+                            variant="outline"
+                            className="rounded-lg hover:bg-red-100 px-6"
+                            onClick={logout}
+                        >
+                            Logout
+                        </Button>
+                    </>
+                ) : (
                     <Button 
                         variant="default"
                         className="rounded-lg bg-[#097833] text-white hover:bg-[#097833]/90 px-6"
+                        onClick={login}
                     >
                         Connect Wallet
                     </Button>
-                </div>
+                )}
+            </div>
         </NavigationMenu>
     )
 }

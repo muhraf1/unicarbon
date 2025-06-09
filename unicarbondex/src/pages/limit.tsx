@@ -22,26 +22,19 @@ const Limit = () => {
   return (
     
     <div className="flex flex-row max-h-full justify-center items-center gap-2">
-<div className='w-1/2 h-[500px]'>
-{/* <iframe 
-  height="100%" 
-  width="100%" 
-  id="geckoterminal-embed" 
-  title="GeckoTerminal Embed" 
-  src="https://www.geckoterminal.com/celo/pools/0x7f7c4335ccac291ddedcef4429a626c442b627ed?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=1h" 
-  frameBorder="2" 
-  allow="clipboard-write" 
-  allowFullScreen
-/> */}
-<ChartDemo></ChartDemo>
-</div>
 
+<div className='w-1/2 h-[500px] border-0'>
+
+<ChartDemo></ChartDemo>
+{/* <iframe height="100%" width="100%" id="geckoterminal-embed" title="GeckoTerminal Embed" src="https://www.geckoterminal.com/eth/pools/0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801?embed=1&info=0&swaps=0&grayscale=0&light_chart=0&chart_type=price&resolution=15m" frameborder="0" allow="clipboard-write" allowfullscreen></iframe></div> */}
+</div>
       {/* main cards */}
       <Card className=" w-[450px] p-3  bg-[#A4D696] border-0 mt-5 gap-1">
         <TradeFeature></TradeFeature>
 
         {/* limits Settings */}
-        <div className=" px-0.5 py-1 w-full rounded-xl border-1 ">
+    
+        <div className=" px-0.5 py-1 w-full rounded-xl border-1  bg-[#D6EBD0] ">
           <div className="flex flex-col items-start px-2 py-2">
             {/* when 1 {sell token} is worth & Switch function  */}
             <div className='flex  w-full justify-between '>
@@ -93,25 +86,17 @@ const Limit = () => {
                 </Button>
             </div>
              
-
             </div>
 
           </div>
         
            
-       <div className=' flex flex-row bg-[#A4D696] rounded-bl-lg rounded-br-lg justify-between p-2'>
-        
-        <div className='text-gray-700 text-lg font-medium'>
-          
-        </div>
-
-    
-       </div>
+       {/*  */}
         </div>
 
 
         {/* upper cards pair  */}
-        <Card className="gap-0 py-3">
+        <Card className="gap-0 py-3 bg-[#D6EBD0]">
           <div className="flex flex-col items-start px-2 ">
             
  
@@ -138,7 +123,7 @@ const Limit = () => {
           </div>
         </Card>
         {/* lower cards pair  */}
-        <Card className='py-3'>
+        <Card className='py-3 bg-[#D6EBD0]'>
           <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Receive at least</h4></div>

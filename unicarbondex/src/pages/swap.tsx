@@ -17,7 +17,7 @@ export function Swap() {
         <Card className=" w-[450px] p-3  bg-[#A4D696] border-0 mt-5 gap-1">
           <TradeFeature></TradeFeature>
         {/* upper cards pair  */}
-        <Card className="gap-0">
+        <Card className="gap-0 bg-[#D6EBD0]">
         <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Sell</h4></div>
@@ -36,7 +36,7 @@ export function Swap() {
         </div>
         </Card>
         {/* lower cards pair  */}
-        <Card>
+        <Card className="gap-0 bg-[#D6EBD0]">
         <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Buy</h4></div>

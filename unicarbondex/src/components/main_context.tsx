@@ -5,15 +5,19 @@ import { DropdownMenuContent } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Badge } from "@/components/ui/badge"
 import { Link } from 'react-router-dom'
+import LoginWithEmail from "./LoginwithEmail";
 
 export function MainContext() {
+   
     return (
+       
         <div className="flex flex-col justify-center items-center  ">
+       
        <div className="text-5xl text-[#0D7834] font-bold py-8" >Trade carbon anytime, <br></br> anywhere. </div>
         {/* main cards */}
-        <Card className=" w-[450px] p-2  bg-[#A4D696] border-0">
+        <Card className=" w-[450px] p-2  bg-[#A4D696] border-0 ">
         {/* upper cards pair  */}
-        <Card>
+        <Card className="gap-0 py-3 bg-[#D6EBD0] mt-2">
         <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Sell</h4></div>
@@ -40,7 +44,7 @@ export function MainContext() {
         </div>
         </Card>
         {/* lower cards pair  */}
-        <Card>
+        <Card className="gap-0 py-3 bg-[#D6EBD0]">
         <div className="flex flex-col items-start px-2 ">
             {/* title  */}
             <div><h4>Buy</h4></div>
