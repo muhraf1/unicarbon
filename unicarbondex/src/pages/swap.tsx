@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { Card, CardAction, CardContent } from "@/components/ui/card";
 import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
@@ -8,9 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import SelectToken from "@/components/select_token";
 import TradeFeature from "@/components/trade_feature";
 import { getBalance } from '@wagmi/core'
-import { usePrivy, useWallets,useSignMessage } from "@privy-io/react-auth";
-import {config} from '../wagmiconfig';
-
+import { usePrivy, useWallets, useSignMessage } from "@privy-io/react-auth";
+import { config } from '../wagmiconfig';
+import { getUsdcUsdPrice } from "@/getUsdcUsdPrice";
 
 interface Token {
   name: string;
@@ -22,18 +22,37 @@ interface Token {
 
 export function Swap() {
   const { user, login } = usePrivy();
-  const { wallets,ready } = useWallets();
-  // const {signMessage} = useSignMessage();
+  const { wallets, ready } = useWallets();
   const [token0, setToken0] = useState<Token | undefined>(undefined);
   const [token1, setToken1] = useState<Token | undefined>(undefined);
   const [amount0, setAmount0] = useState("");
   const [amount1, setAmount1] = useState("");
-  
-  const balance = getBalance(config, {
-    address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
-  })
-  console.log( "balance",balance);
+  const [balance0, setBalance0] = useState<any>(undefined);
+  const [balance1, setBalance1] = useState<any>(undefined);
 
+  const handleToken0Select = (token: Token, balance: any) => {
+    setToken0(token);
+    setBalance0(balance);
+  };
+
+  const handleToken1Select = (token: Token, balance: any) => {
+    setToken1(token);
+    setBalance1(balance);
+  };
+
+  const handleSwitchTokens = () => {
+    const tempToken = token0;
+    const tempAmount = amount0;
+    const tempBalance = balance0;
+    setToken0(token1);
+    setToken1(tempToken);
+    setAmount0(amount1);
+    setAmount1(tempAmount);
+    setBalance0(balance1);
+    setBalance1(tempBalance);
+  };
+
+  
 
   const handleSwap = async () => {
     if (!user) {
@@ -43,20 +62,14 @@ export function Swap() {
     }
     // Implement swap logic here
     console.log(`Swapping ${amount0} ${token0?.symbol} for ${amount1} ${token1?.symbol}`);
+    console.log('balance0', balance0);
+    console.log('balance1', balance1);
     console.log('Wallets', wallets);
     console.log('Ready', ready);
   
-  };  
-
-  const handleSwitchTokens = () => {
-    const tempToken = token0;
-    const tempAmount = amount0;
-    setToken0(token1);
-    setToken1(tempToken);
-    setAmount0(amount1);
-    setAmount1(tempAmount);
-  };
-
+  }; 
+  
+  
   return (
     <div className="flex flex-col justify-center items-center">
       <div></div>
@@ -74,11 +87,11 @@ export function Swap() {
                 value={amount0}
                 onChange={(e) => setAmount0(e.target.value)}
               />
-              <SelectToken onSelect={setToken0} selectedToken={token0} />
+              <SelectToken onSelect={handleToken0Select} selectedToken={token0} />
             </div>
             <div className="flex flex-row w-full items-center justify-between gap-2">
-              <div>$0</div>
-              <div> balance : {token0 ? token0.symbol : ""} </div>
+              {/* price token 0  */}
+              {/* <div>{prices?.usdcPrice}</div> */}
             </div>
           </div>
         </Card>
@@ -105,11 +118,11 @@ export function Swap() {
                 value={amount1}
                 onChange={(e) => setAmount1(e.target.value)}
               />
-              <SelectToken onSelect={setToken1} selectedToken={token1} />
+              <SelectToken onSelect={handleToken1Select} selectedToken={token1} />
             </div>
             <div className="flex flex-row w-full items-center justify-between gap-1">
-              <div>$0</div>
-              <div> balance : {token1 ? token1.symbol : ""}</div>
+              {/* Price token 1 */}
+              {/* <div>{prices?.ethPrice}</div> */}
             </div>
           </div>
         </Card>
