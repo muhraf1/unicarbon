@@ -13,3 +13,27 @@
 [submodule "unicarbondex/carbon-hook/lib/v4-periphery"]
 	path = unicarbondex/carbon-hook/lib/v4-periphery
 	url = https://github.com/Uniswap/v4-periphery
+[submodule "unicarbondex/test-hook/lib/forge-std"]
+	path = unicarbondex/test-hook/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "unicarbondex/test-hook/lib/v4-periphery"]
+	path = unicarbondex/test-hook/lib/v4-periphery
+	url = https://github.com/Uniswap/v4-periphery
+[submodule "unicarbondex/csmm-hook/lib/forge-std"]
+	path = unicarbondex/csmm-hook/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "unicarbondex/csmm-hook/lib/v4-periphery"]
+	path = unicarbondex/csmm-hook/lib/v4-periphery
+	url = https://github.com/Uniswap/v4-periphery
+[submodule "unicarbondex/points-hook/lib/forge-std"]
+	path = unicarbondex/points-hook/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "unicarbondex/points-hook/lib/v4-periphery"]
+	path = unicarbondex/points-hook/lib/v4-periphery
+	url = https://github.com/Uniswap/v4-periphery
+[submodule "unicarbondex/points-hook/lib/uniswap-hooks"]
+	path = unicarbondex/points-hook/lib/uniswap-hooks
+	url = https://github.com/openzeppelin/uniswap-hooks
+[submodule "unicarbondex/points-hook/lib/hookmate"]
+	path = unicarbondex/points-hook/lib/hookmate
+	url = https://github.com/akshatmittal/hookmate
