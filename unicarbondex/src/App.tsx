@@ -11,6 +11,7 @@ import Limit from './pages/limit'
 import Twap from './pages/twap'
 import Explore from './pages/explore'
 import Positions from './pages/positions'
+import ForestryDashboard from './pages/Iot_Console'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       
       <Routes>
         <Route path="/" element={<MainContext />} />
+        <Route path="/Iot_Console" element={<ForestryDashboard />} />
         <Route path="/swap" element={<Swap />} />
         <Route path="/pool/:poolId" element={<Pool />} />
         <Route path="/Explore" element={< Explore />} />

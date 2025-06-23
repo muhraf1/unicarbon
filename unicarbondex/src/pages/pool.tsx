@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { ChartDemo } from '@/components/chart_demo';
 import { RefreshCcw, Plus } from 'lucide-react';
 import { Progress } from "@/components/ui/progress"
+import HalfGauge from '@/components/gauge_chart';
 
 import TradeFeature from "@/components/trade_feature";
 import SelectToken from '@/components/select_token';
@@ -103,7 +104,7 @@ const Pool = () => {
 
   return (
     <div className="flex flex-row max-h-full justify-center items-center gap-2">
-      <div className='w-1/2 h-[500px] border-0'>
+      <div className='w-1/2 items-top h-[500px] border-0'>
       <ChartDemo currentPool={currentPool}></ChartDemo>
         {/* Display current pool info */}
         {/* <div className="mt-4 p-4 bg-gray-100 rounded-lg">
@@ -163,6 +164,10 @@ const Pool = () => {
           <p className='text-xs pb-2 '>Buffer Pool</p>
           <Progress value={progress} className="w-[90%] h-[30px]   " />
         </div>
+        {/* gauge component */}
+        <HalfGauge 
+
+/>
       </Card>
     
     </div>
