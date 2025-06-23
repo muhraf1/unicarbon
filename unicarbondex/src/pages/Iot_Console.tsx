@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { TreePine, Thermometer, Wind, Activity, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { TreePine, Thermometer, Wind, Activity, AlertTriangle, CheckCircle, XCircle, DollarSign } from 'lucide-react';
 
 interface SensorData {
   timestamp: string;
@@ -11,6 +11,7 @@ interface SensorData {
   co2Norm: number;
   humidityNorm: number;
   aggregateScore: number;
+  carbonPrice: number;
 }
 
 interface ClassificationThresholds {
@@ -30,6 +31,25 @@ const ForestryDashboard: React.FC = () => {
   const [thresholds, setThresholds] = useState<ClassificationThresholds | null>(null);
   const [isConnected, setIsConnected] = useState(true);
   const [currentScenario, setCurrentScenario] = useState<Scenario>('normal');
+  const [carbonPriceBase, setCarbonPriceBase] = useState<number>(170); // Base price around middle of range
+
+  // Generate carbon price with low volatility (independent of scenario)
+  const generateCarbonPrice = (previousPrice: number = 170): number => {
+    // Very low volatility: ±0.5% maximum change per update
+    const maxChange = 0.005;
+    const change = (Math.random() - 0.5) * 2 * maxChange;
+    let newPrice = previousPrice * (1 + change);
+    
+    // Ensure price stays within $140-$200 range
+    newPrice = Math.max(140, Math.min(200, newPrice));
+    
+    // Add slight mean reversion tendency towards $170
+    const meanReversion = 0.001;
+    const drift = (170 - newPrice) * meanReversion;
+    newPrice += drift;
+    
+    return newPrice;
+  };
 
   // Generate random sensor values based on scenario
   const generateSensorValue = (min: number, max: number, scenario: Scenario = 'normal'): { temp: number, co2: number, humidity: number } => {
@@ -97,7 +117,7 @@ const ForestryDashboard: React.FC = () => {
   };
 
   // Generate new sensor data point
-  const generateDataPoint = (): SensorData => {
+  const generateDataPoint = (previousCarbonPrice?: number): SensorData => {
     const now = new Date();
     const ranges = getRanges(currentScenario);
     const sensorValues = generateSensorValue(0, 0, currentScenario);
@@ -116,6 +136,9 @@ const ForestryDashboard: React.FC = () => {
       humidityNorm * 0.4 // Higher humidity is better
     );
     
+    // Generate carbon price independent of scenario
+    const carbonPrice = generateCarbonPrice(previousCarbonPrice || carbonPriceBase);
+    
     return {
       timestamp: now.toLocaleTimeString(),
       temperature,
@@ -124,7 +147,8 @@ const ForestryDashboard: React.FC = () => {
       temperatureNorm,
       co2Norm,
       humidityNorm,
-      aggregateScore: Math.max(0, Math.min(100, aggregateScore))
+      aggregateScore: Math.max(0, Math.min(100, aggregateScore)),
+      carbonPrice
     };
   };
 
@@ -132,6 +156,8 @@ const ForestryDashboard: React.FC = () => {
   useEffect(() => {
     // Generate initial data (last 20 readings)
     const initialData: SensorData[] = [];
+    let currentCarbonPrice = carbonPriceBase;
+    
     for (let i = 19; i >= 0; i--) {
       const timestamp = new Date(Date.now() - i * 120000).toLocaleTimeString(); // 2 minutes intervals
       const ranges = getRanges('normal'); // Start with normal scenario
@@ -149,6 +175,9 @@ const ForestryDashboard: React.FC = () => {
         humidityNorm * 0.4
       );
       
+      // Generate carbon price for historical data
+      currentCarbonPrice = generateCarbonPrice(currentCarbonPrice);
+      
       initialData.push({
         timestamp,
         temperature,
@@ -157,22 +186,24 @@ const ForestryDashboard: React.FC = () => {
         temperatureNorm,
         co2Norm,
         humidityNorm,
-        aggregateScore: Math.max(0, Math.min(100, aggregateScore))
+        aggregateScore: Math.max(0, Math.min(100, aggregateScore)),
+        carbonPrice: currentCarbonPrice
       });
     }
     
     setSensorData(initialData);
     setCurrentData(initialData[initialData.length - 1]);
+    setCarbonPriceBase(currentCarbonPrice);
     
     // Calculate initial thresholds
     const aggregateScores = initialData.map(d => d.aggregateScore);
     setThresholds(calculateIQRThresholds(aggregateScores));
   }, []);
 
-  // Update data every 2 minutes
+  // Update data every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      const newData = generateDataPoint();
+      const newData = generateDataPoint(carbonPriceBase);
       
       setSensorData(prev => {
         const updated = [...prev.slice(-19), newData];
@@ -185,13 +216,14 @@ const ForestryDashboard: React.FC = () => {
       });
       
       setCurrentData(newData);
+      setCarbonPriceBase(newData.carbonPrice);
       
       // Simulate occasional connection issues
       setIsConnected(Math.random() > 0.05);
-    }, 30000); // 2 minutes = 120,000 milliseconds
+    }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
-  }, [currentScenario]);
+  }, [currentScenario, carbonPriceBase]);
 
   const getAlertColor = (level: AlertLevel): string => {
     switch (level) {
@@ -258,7 +290,7 @@ const ForestryDashboard: React.FC = () => {
         </div>
 
         {/* Current Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -307,6 +339,21 @@ const ForestryDashboard: React.FC = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
+                <p className="text-sm font-medium text-gray-600">Carbon Price</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  ${currentData?.carbonPrice.toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-500">
+                  per tonne CO₂
+                </p>
+              </div>
+              <DollarSign className="w-8 h-8 text-emerald-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-sm font-medium text-gray-600">Forest Health</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {currentData?.aggregateScore.toFixed(0)}/100
@@ -339,6 +386,36 @@ const ForestryDashboard: React.FC = () => {
                   : 'Optimal forest conditions: Moderate temperature (15-35°C), Good humidity (40-90%), Normal CO₂ (350-450 ppm)'
                 }
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Carbon Price Information */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <DollarSign className="w-6 h-6 text-emerald-600" />
+            <h3 className="text-lg font-semibold text-gray-900">Carbon Price Information</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div className="text-center">
+              <p className="font-medium text-gray-600">Current Price</p>
+              <p className="text-lg font-bold text-emerald-600">${currentData?.carbonPrice.toFixed(2)}</p>
+              <p className="text-xs text-gray-500">per tonne CO₂</p>
+            </div>
+            <div className="text-center">
+              <p className="font-medium text-gray-600">Price Range</p>
+              <p className="text-lg font-bold text-gray-700">$140 - $200</p>
+              <p className="text-xs text-gray-500">Market bounds</p>
+            </div>
+            <div className="text-center">
+              <p className="font-medium text-gray-600">Volatility</p>
+              <p className="text-lg font-bold text-blue-600">Low</p>
+              <p className="text-xs text-blue-500">±0.5% max change</p>
+            </div>
+            <div className="text-center">
+              <p className="font-medium text-gray-600">Independence</p>
+              <p className="text-lg font-bold text-purple-600">Scenario-Free</p>
+              <p className="text-xs text-purple-500">Market-driven</p>
             </div>
           </div>
         </div>
@@ -437,6 +514,43 @@ const ForestryDashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* Carbon Price Chart */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Carbon Price Trend</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={sensorData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="timestamp" />
+              <YAxis domain={[135, 205]} />
+              <Tooltip formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Carbon Price']} />
+              <Line 
+                type="monotone" 
+                dataKey="carbonPrice" 
+                stroke="#10b981" 
+                strokeWidth={3}
+                dot={{ fill: '#10b981', strokeWidth: 2, r: 3 }}
+              />
+              {/* Reference lines for price bounds */}
+              <Line 
+                type="monotone" 
+                dataKey={() => 140} 
+                stroke="#ef4444" 
+                strokeDasharray="5 5"
+                strokeWidth={2}
+                dot={false}
+              />
+              <Line 
+                type="monotone" 
+                dataKey={() => 200} 
+                stroke="#ef4444" 
+                strokeDasharray="5 5"
+                strokeWidth={2}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
         {/* Recent Readings Table */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Readings</h3>
@@ -448,6 +562,7 @@ const ForestryDashboard: React.FC = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp (°C)</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CO₂ (ppm)</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Humidity (%)</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Carbon Price</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Health Score</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 </tr>
@@ -461,6 +576,7 @@ const ForestryDashboard: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{data.temperature.toFixed(1)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{data.co2.toFixed(0)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{data.humidity.toFixed(1)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">${data.carbonPrice.toFixed(2)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{data.aggregateScore.toFixed(1)}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getAlertColor(alertLevel)}`}>
