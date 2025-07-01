@@ -21,7 +21,7 @@ import SelectToken from '@/components/select_token';
 const poolsData = [
   {
     id: 1,
-    poolPair: "USDC/ETH",
+    poolPair: "WETH/USDC",
     feeTier: "0.05%",
     tvl: "$10,250,000",
     poolAPR: "4.2%",
@@ -30,7 +30,7 @@ const poolsData = [
   },
   {
     id: 2,
-    poolPair: "WBTC/ETH",
+    poolPair: "WETH/USDcar",
     feeTier: "0.3%",
     tvl: "$8,750,000",
     poolAPR: "5.1%",
@@ -39,7 +39,7 @@ const poolsData = [
   },
   {
     id: 3,
-    poolPair: "USDT/USDC",
+    poolPair: "USDC/USDcar",
     feeTier: "0.01%",
     tvl: "$15,300,000",
     poolAPR: "1.8%",
@@ -48,16 +48,16 @@ const poolsData = [
   },
   {
     id: 4,
-    poolPair: "DAI/USDC",
-    feeTier: "0.01%",
+    poolPair: "WETH/CAR",
+    feeTier: "0.3%",
     tvl: "$7,800,000",
-    poolAPR: "1.5%",
+    poolAPR: "4.5%",
     oneDayVol: "$1,100,000",
     thirtyDayVol: "$25,600,000",
   },
   {
     id: 5,
-    poolPair: "ETH/MATIC",
+    poolPair: "USDC/CAR",
     feeTier: "0.3%",
     tvl: "$4,500,000",
     poolAPR: "6.2%",
@@ -66,23 +66,14 @@ const poolsData = [
   },
   {
     id: 6,
-    poolPair: "LINK/ETH",
+    poolPair: "USDcar/CAR",
     feeTier: "0.3%",
     tvl: "$3,200,000",
     poolAPR: "4.8%",
     oneDayVol: "$520,000",
     thirtyDayVol: "$12,400,000",
-  },
-  {
-    id: 7,
-    poolPair: "UNI/ETH",
-    feeTier: "0.3%",
-    tvl: "$2,900,000",
-    poolAPR: "5.5%",
-    oneDayVol: "$480,000",
-    thirtyDayVol: "$10,800,000",
-  },
-]
+  }
+];
 
 const Pool = () => {
   const { poolId } = useParams<{ poolId: string }>()

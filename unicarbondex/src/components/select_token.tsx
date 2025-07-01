@@ -51,7 +51,21 @@ const SelectToken: React.FC<SelectTokenProps> = ({ onSelect, selectedToken }) =>
       address: "0x31d0220469e10c4E71834a79b1f276d740d3768F",
       logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
       type: "Stablecoins Token"
-    }
+    },
+    {
+      name: "USDcar",
+      symbol: "USDcar",
+      address: "0x30a8b15a0B969589E78bb3E83Bbbf0926D226e03",
+      logo: "https://miro.medium.com/v2/resize:fit:512/format:webp/1*4VfAENfYSZHu-p_Cir6_dQ.png",
+      type: "Stablecoins Token"
+    },
+    {
+      name: "Carbon Token",
+      symbol: "CAR",
+      address: "0xC529C82d5e42958883b3D097C815ad4f4Ae90684",
+      logo: "https://miro.medium.com/v2/resize:fit:512/format:webp/1*YfIRrzPYDAFurRQL8l0neA.png",
+      type: "Carbon Token"
+    },
   ];
 
   useEffect(() => {
@@ -70,6 +84,13 @@ const SelectToken: React.FC<SelectTokenProps> = ({ onSelect, selectedToken }) =>
         if (selectedToken.symbol === "WETH") {
           setTokenPrice(priceData?.ethData?.price);
         } else if (selectedToken.symbol === "USDC") {
+          setTokenPrice(priceData?.usdcData?.price);
+        } else if (selectedToken.symbol === "USDcar") {
+          // USDcar is pegged to USD, so price is always 1
+          setTokenPrice("1.00");
+        } else if (selectedToken.symbol === "CAR") {
+          // For CAR token, we can use the USDC price as a reference
+          // You may want to implement a specific price feed for CAR token later
           setTokenPrice(priceData?.usdcData?.price);
         }
       }
